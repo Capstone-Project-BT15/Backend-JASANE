@@ -38,4 +38,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function ktpVerfieds(): HasMany
+    {
+        return $this->hasMany(KtpVerified::class);
+    }
+
+    public function addresses(): HasMany
+    {
+        return $this->hasMany(Address::class);
+    }
 }

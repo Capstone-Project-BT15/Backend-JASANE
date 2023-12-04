@@ -19,10 +19,9 @@ Route::post('login/user', [App\Http\Controllers\Api\AuthController::class, 'logi
 Route::post('register/recruiter', [App\Http\Controllers\Api\AuthController::class, 'registerRecruiter']);
 Route::post('login/recruiter', [App\Http\Controllers\Api\AuthController::class, 'loginRecruiter']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('ktp/data', [App\Http\Controllers\Api\KtpController::class, 'index']);
+    Route::post('ktp/verification', [App\Http\Controllers\Api\KtpController::class, 'verification']);
+    Route::post('biodata' , [App\Http\Controllers\Api\BiodataController::class, 'store']);
     Route::post('logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
 });
