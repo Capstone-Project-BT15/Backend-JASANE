@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ktp_verified', function (Blueprint $table) {
+        Schema::create('ktp_verifieds', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('ktp');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ktp_verified');
+        Schema::dropIfExists('ktp_verifieds');
     }
 };
