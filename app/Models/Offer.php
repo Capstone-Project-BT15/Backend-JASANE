@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Address extends Model
+class Offer extends Model
 {
     use HasFactory;
 
@@ -16,8 +16,13 @@ class Address extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function offers(): HasMany
+    public function work(): BelongsTo
     {
-        return $this->hasMany(Offer::class);
+        return $this->belongsTo(Work::class);
+    }
+
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
     }
 }

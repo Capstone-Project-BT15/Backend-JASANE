@@ -20,11 +20,14 @@ Route::post('register/recruiter', [App\Http\Controllers\Api\AuthController::clas
 Route::post('login/recruiter', [App\Http\Controllers\Api\AuthController::class, 'loginRecruiter']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('home/user', [App\Http\Controllers\Api\HomeController::class, 'index']);
     Route::get('ktp/data', [App\Http\Controllers\Api\KtpController::class, 'index']);
     Route::post('ktp/verification', [App\Http\Controllers\Api\KtpController::class, 'verification']);
     Route::post('biodata' , [App\Http\Controllers\Api\BiodataController::class, 'store']);
     Route::get('works' , [App\Http\Controllers\Api\WorkController::class, 'index']);
     Route::post('works' , [App\Http\Controllers\Api\WorkController::class, 'store']);
     Route::get('works/{id}' , [App\Http\Controllers\Api\WorkController::class, 'show']);
+    Route::get('get-job/{id}' , [App\Http\Controllers\Api\OfferController::class, 'getJob']);
+    Route::post('place-an-offer', [App\Http\Controllers\Api\OfferController::class, 'placeAnOffer']);
     Route::post('logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
 });

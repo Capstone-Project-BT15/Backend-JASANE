@@ -10,4 +10,9 @@ class Work extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function offers(): HasMany
+    {
+        return $this->hasMany(Offer::class);
+    }
 }

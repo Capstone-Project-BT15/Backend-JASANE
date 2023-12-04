@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Work;
+use App\Models\Address;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\ResponseFormatter;
@@ -16,10 +17,11 @@ class WorkController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $address = Address::where('user_id', $user->id)->first();
         $works = Work::all();
 
-        $userLatitude = $user->latitude;
-        $userLongitude = $user->longitude;
+        $userLatitude = $address->latitude;
+        $userLongitude = $address->longitude;
 
         $userLocation = new GeoCoordinate($userLatitude, $userLongitude);
 
@@ -103,14 +105,15 @@ class WorkController extends Controller
     public function show($id)
     {
         $user = Auth::user();
+        $address = Address::where('user_id', $user->id)->first();
         $work = Work::find($id);
 
         if (!$work) {
             return ResponseFormatter::error(null, 'Work not found', 404);
         }
 
-        $userLatitude = $user->latitude;
-        $userLongitude = $user->longitude;
+        $userLatitude = $address->latitude;
+        $userLongitude = $address->longitude;
 
         $userLocation = new GeoCoordinate($userLatitude, $userLongitude);
 
