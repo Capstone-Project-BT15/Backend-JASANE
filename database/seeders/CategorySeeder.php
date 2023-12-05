@@ -13,7 +13,7 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::create(
+        Category::insert([
             ['title' => 'Pertukangan', 'slug' =>'pertukangan'],
             ['title' => 'Cuci Baju', 'slug' =>'cuci-baju'],
             ['title' => 'Cuci Piring', 'slug' =>'cuci-piring'],
@@ -24,6 +24,6 @@ class CategorySeeder extends Seeder
             ['title' => 'Tani Harian', 'slug' =>'tani-harian'],
             ['title' => 'Memasak', 'slug' =>'memasak'],
             ['title' => 'Baby Sitter', 'slug' =>'baby-sitter']
-        );
+        ]);
     }
 }
