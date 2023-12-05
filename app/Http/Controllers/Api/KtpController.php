@@ -8,7 +8,7 @@ use App\Models\KtpVerified;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\ResponseFormatter;
-use Google\Cloud\Storage\StorageClient;
+use Illuminate\Support\Facades\Storage;
 
 class KtpController extends Controller
 {
@@ -31,31 +31,18 @@ class KtpController extends Controller
             return response()->json($validator->errors());
         }
 
-        if (!$request->hasFile('ktp')) {
-            $image = $request->file('ktp');
-            $storage = new StorageClient([
-                'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-                'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE')
-            ]);
-            $bucketName = env('GOOGLE_CLOUD_BUCKET');
-            $bucket = $storage->bucket($bucketName);
+        $image = $request->file('ktp');
+        $fileName = uniqid('image_').'.'.$image->getClientOriginalExtension();
 
-            $fileData = file_get_contents($image->getRealPath());
-            $fileName = uniqid('image_').'.'.$image->getClientOriginalExtension();
-            $object = $bucket->upload($fileData, [
-                'name' => $fileName
-            ]);
+        Storage::disk('gcs')->put($fileName, file_get_contents($image->getRealPath()));
 
-            $imageUrl = $object->signedUrl(new \DateTime('tomorrow'));
+        $imageUrl = Storage::disk('gcs')->url($fileName);
 
-            $data = KtpVerified::create([
-                'user_id' => $user->id,
-                'ktp' => $imageUrl
-            ]);
+        $data = KtpVerified::create([
+            'user_id' => $user->id,
+            'ktp' => $imageUrl
+        ]);
 
-            return ResponseFormatter::success($data, 'KTP has been successfully verified');
-        }
-
-        return ResponseFormatter::error(null, 'KTP file not found', 404);
+        return ResponseFormatter::success($data, 'KTP has been successfully verified');
     }
 }

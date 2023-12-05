@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Helpers\ResponseFormatter;
 use Google\Cloud\Storage\StorageClient;
 use App\Helpers\GeoCoordinate;
+use Illuminate\Support\Facades\Storage;
 
 class WorkController extends Controller
 {
@@ -65,41 +66,28 @@ class WorkController extends Controller
             return response()->json($validator->errors());
         }
 
-        if (!$request->hasFile('image')) {
-            $image = $request->file('image');
-            $storage = new StorageClient([
-                'projectId' => env('GOOGLE_CLOUD_PROJECT_ID'),
-                'keyFilePath' => env('GOOGLE_CLOUD_KEY_FILE')
-            ]);
-            $bucketName = env('GOOGLE_CLOUD_BUCKET');
-            $bucket = $storage->bucket($bucketName);
+        $image = $request->file('image');
+        $fileName = uniqid('image_').'.'.$image->getClientOriginalExtension();
 
-            $fileData = file_get_contents($image->getRealPath());
-            $fileName = uniqid('image_').'.'.$image->getClientOriginalExtension();
-            $object = $bucket->upload($fileData, [
-                'name' => $fileName
-            ]);
+        Storage::disk('gcs')->put($fileName, file_get_contents($image->getRealPath()));
 
-            $imageUrl = $object->signedUrl(new \DateTime('tomorrow'));
+        $imageUrl = Storage::disk('gcs')->url($fileName);
 
-            $data = Work::create([
-                'image' => $imageUrl,
-                'title' => $request->title,
-                'category_id' => $request->category_id,
-                'telephone' => $request->telephone,
-                'min_budget' => $request->min_budget,
-                'max_budget' => $request->max_budget,
-                'type_of_work' => $request->type_of_work,
-                'start_date' => $request->start_date,
-                'description' => $request->description,
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude,
-            ]);
+        $data = Work::create([
+            'image' => $imageUrl,
+            'title' => $request->title,
+            'category_id' => $request->category_id,
+            'telephone' => $request->telephone,
+            'min_budget' => $request->min_budget,
+            'max_budget' => $request->max_budget,
+            'type_of_work' => $request->type_of_work,
+            'start_date' => $request->start_date,
+            'description' => $request->description,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+        ]);
 
-            return ResponseFormatter::success($data, 'Data has been successfully saved');
-        }
-
-        return ResponseFormatter::error(null, 'Image file not found', 404);
+        return ResponseFormatter::success($data, 'Data has been successfully saved');
     }
 
     public function show($id)
