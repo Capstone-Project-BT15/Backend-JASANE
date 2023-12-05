@@ -21,6 +21,7 @@ Route::post('login/recruiter', [App\Http\Controllers\Api\AuthController::class, 
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('home/user', [App\Http\Controllers\Api\HomeController::class, 'index']);
+    Route::get('categories', [App\Http\Controllers\Api\CategoryController::class, 'index']);
     Route::get('ktp/data', [App\Http\Controllers\Api\KtpController::class, 'index']);
     Route::post('ktp/verification', [App\Http\Controllers\Api\KtpController::class, 'verification']);
     Route::post('biodata' , [App\Http\Controllers\Api\BiodataController::class, 'store']);
