@@ -98,10 +98,81 @@ POST /api/login/recruiter
 - `email` (required): User's email address.
 - `password` (required): User's password.
 
+#### Response
 ``` json
 {
     "message": "Login Success",
     "access_token": "token_value",
     "token_type": "Bearer"
+}
+```
+
+### Logout
+
+``` shell
+POST /api/logout
+```
+Headers
+- Authorization: Bearer {token_value}
+
+#### Response
+``` json
+{
+    "message": "logout success"
+}
+```
+
+# Biodata Management API using Laravel
+
+This API provides endpoints for managing user biodata, including storing user addresses.
+
+## Endpoints
+
+### Store User Biodata
+
+#### URL
+
+``` shell
+POST /api/biodata/store
+```
+
+#### Headers
+
+- `Authorization: Bearer {token_value}`
+- `Content-Type: application/json`
+
+#### Parameters
+
+- `fullname` (required): Full name of the user.
+- `telephone` (required): User's telephone number (maximum 15 characters).
+- `province` (required): Province of the address.
+- `city` (required): City of the address.
+- `subdistrict` (required): Subdistrict of the address.
+- `village` (required): Village of the address.
+- `address` (required): Detailed address information.
+- `latitude` (required): Latitude coordinates of the address.
+- `longitude` (required): Longitude coordinates of the address.
+
+#### Response
+
+```json
+{
+    "status": "success",
+    "message": "Data has been successfully saved",
+    "data": {
+        "id": 1,
+        "user_id": 123,
+        "fullname": "John Doe",
+        "telephone": "123456789",
+        "province": "Province",
+        "city": "City",
+        "subdistrict": "Subdistrict",
+        "village": "Village",
+        "address": "Detailed address info",
+        "latitude": "latitude_value",
+        "longitude": "longitude_value",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    }
 }
 ```
