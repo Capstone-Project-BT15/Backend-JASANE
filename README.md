@@ -1,6 +1,8 @@
 # API Documentation
 
-This API provides endpoints for user authentication and authorization using Laravel. Below are the available endpoints and their functionalities.
+# User Authentication API using Laravel
+
+This API provides endpoints for user registration, login, and logout functionalities using Laravel.
 
 ## Endpoints
 
