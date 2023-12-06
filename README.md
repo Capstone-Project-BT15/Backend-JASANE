@@ -8,8 +8,9 @@ This API provides endpoints for user authentication and authorization using Lara
 
 #### URL
 
-`POST /api/register/user
-
+```shell
+POST /api/register/user
+```
 
 #### Parameters
 
