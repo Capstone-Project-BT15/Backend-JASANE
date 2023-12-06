@@ -53,3 +53,53 @@ POST /api/login/user
     "token_type": "Bearer"
 }
 ```
+
+### Recruiter Registration
+
+#### URL
+
+```shell
+POST /api/register/recruiter
+```
+
+#### Parameters
+
+- `fullname` (required): Full name of the user.
+- `telephone` (required): User's telephone number (maximum 15 characters).
+- `email` (required): User's email address. Must be unique.
+- `password` (required): User's password (min 6 characters).
+- `password_confirmation` (required): Confirmation of the user's password.
+
+#### Response
+
+```json
+{
+    "data": {
+        "fullname": "John Doe",
+        "telephone": "123456789",
+        "email": "john@example.com",
+        "role": "recruiter",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    },
+    "access_token": "token_value",
+    "token_type": "Bearer"
+}
+```
+
+#### Recruiter Login
+
+``` shell
+POST /api/login/recruiter
+```
+
+- `email` (required): User's email address.
+- `password` (required): User's password.
+
+``` json
+{
+    "message": "Login Success",
+    "access_token": "token_value",
+    "token_type": "Bearer"
+}
+```
