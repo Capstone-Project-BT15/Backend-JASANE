@@ -35,3 +35,13 @@ POST /api/register/user
     "access_token": "token_value",
     "token_type": "Bearer"
 }
+```
+
+#### User Login
+
+``` shell
+POST /api/login/user
+```
+
+- `email` (required): User's email address.
+- `password` (required): User's password.
