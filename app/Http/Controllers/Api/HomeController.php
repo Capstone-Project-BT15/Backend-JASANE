@@ -38,8 +38,6 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
-        $closestWorks = collect();
-
         foreach ($closestWork as $closest) {
             $closestWorkLatitude = $closest->latitude;
             $closestWorkLongitude = $closest->longitude;
@@ -49,17 +47,6 @@ class HomeController extends Controller
             $distance = $userLocation->distanceTo($closestWorkLocation);
 
             $closest->distance_to_user = ($distance >= 1000) ? number_format($distance / 1000, 2) . ' km' : number_format($distance, 2) . ' m';
-
-            $closestWorks->push($closest);
-        }
-
-        if ($closestWorks->count() < 4) {
-            $remaining = 4 - $closestWorks->count();
-            $additionalWorks = $allWorks->reject(function ($work) use ($closestWorks) {
-                return $closestWorks->contains('id', $work->id);
-            })->take($remaining);
-
-            $closestWorks = $closestWorks->merge($additionalWorks);
         }
 
         $allWorks = Work::select(DB::raw('*,
