@@ -38,6 +38,8 @@ class HomeController extends Controller
             ->limit(4)
             ->get();
 
+        $closestWorks = collect();
+
         foreach ($closestWork as $closest) {
             $closestWorkLatitude = $closest->latitude;
             $closestWorkLongitude = $closest->longitude;
@@ -46,11 +48,18 @@ class HomeController extends Controller
 
             $distance = $userLocation->distanceTo($closestWorkLocation);
 
-            if ($distance >= 1000) {
-                $closestWork->distance_to_user = number_format($distance / 1000, 2) . ' km';
-            } else {
-                $closestWork->distance_to_user = number_format($distance, 2) . ' m';
-            }
+            $closest->distance_to_user = ($distance >= 1000) ? number_format($distance / 1000, 2) . ' km' : number_format($distance, 2) . ' m';
+
+            $closestWorks->push($closest);
+        }
+
+        if ($closestWorks->count() < 4) {
+            $remaining = 4 - $closestWorks->count();
+            $additionalWorks = $allWorks->reject(function ($work) use ($closestWorks) {
+                return $closestWorks->contains('id', $work->id);
+            })->take($remaining);
+
+            $closestWorks = $closestWorks->merge($additionalWorks);
         }
 
         $allWorks = Work::select(DB::raw('*,
@@ -69,16 +78,22 @@ class HomeController extends Controller
 
             $distance = $userLocation->distanceTo($workLocation);
 
-            if ($distance >= 1000) {
-                $work->distance_to_user = number_format($distance / 1000, 2) . ' km';
-            } else {
-                $work->distance_to_user = number_format($distance, 2) . ' m';
-            }
+            $closest->distance_to_user = ($distance >= 1000) ? number_format($distance / 1000, 2) . ' km' : number_format($distance, 2) . ' m';
         }
 
         return ResponseFormatter::success([
             'closest_work' => $closestWork,
             'all_works_with_distance' => $allWorks
+        ], 'Data displayed successfully!');
+    }
+
+    public function recruiter()
+    {
+        $user = Auth::user();
+        $address = Work::where('user_id', $user->id)->get();
+
+        return ResponseFormatter::success([
+            'works' => $works
         ], 'Data displayed successfully!');
     }
 }
