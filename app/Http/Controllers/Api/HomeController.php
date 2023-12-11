@@ -35,11 +35,12 @@ class HomeController extends Controller
             + sin( radians(' . $userLatitude . ') )
             * sin( radians( latitude ) ) ) ) AS distance'))
             ->orderBy('distance')
-            ->first();
+            ->limit(4)
+            ->get();
 
-        if ($closestWork) {
-            $closestWorkLatitude = $closestWork->latitude;
-            $closestWorkLongitude = $closestWork->longitude;
+        foreach ($closestWork as $closest) {
+            $closestWorkLatitude = $closest->latitude;
+            $closestWorkLongitude = $closest->longitude;
 
             $closestWorkLocation = new GeoCoordinate($closestWorkLatitude, $closestWorkLongitude);
 
