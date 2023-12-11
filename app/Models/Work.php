@@ -15,4 +15,9 @@ class Work extends Model
     {
         return $this->hasMany(Offer::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
