@@ -77,7 +77,7 @@ class HomeController extends Controller
     public function recruiter()
     {
         $user = Auth::user();
-        $address = Work::where('user_id', $user->id)->get();
+        $works = Work::where('user_id', $user->id)->get();
 
         return ResponseFormatter::success([
             'works' => $works
