@@ -6,10 +6,7 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
-  REGION: asia-southeast2
   SERVICE: ${{ secrets.SERVICE_ACCOUNT }}
-  IMAGE: asia-southeast2-docker.pkg.dev/capstone-project-406502/jasane-api-cloudrun/jasane
-  TAG: v1.1.2
 
 jobs:
   deploy:
@@ -27,14 +24,6 @@ jobs:
 
       - name: Build and Push the Docker image
         run: |
-          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
-          docker build -t ${{ env.IMAGE }}:latest .
-          docker push ${{ env.IMAGE }}:latest
-
-      - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy ${{ env.SERVICE }} \
-            --image ${{ env.IMAGE }}:latest \
-            --region ${{ env.REGION }} \
-            --platform managed \
-            --port 8080
+          gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+          docker build -t asia-southeast2-docker.pkg.dev/capstone-project-406502/jasane-api-cloudrun/jasane:v1.1.2 .
+          docker push asia-southeast2-docker.pkg.dev/capstone-project-406502/jasane-api-cloudrun/jasane:v1.1.2
