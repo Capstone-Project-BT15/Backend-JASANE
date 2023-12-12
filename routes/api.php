@@ -37,5 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:recruiter')->group(function () {
         Route::get('home/recruiter', [App\Http\Controllers\Api\HomeController::class, 'recruiter']);
         Route::post('works' , [App\Http\Controllers\Api\WorkController::class, 'store']);
+        Route::get('works/recruiter' , [App\Http\Controllers\Api\WorkController::class, 'posts']);
+        Route::get('works/recruiter/{id}' , [App\Http\Controllers\Api\WorkController::class, 'detail']);
     });
 });

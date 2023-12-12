@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Work;
 use App\Models\Address;
+use App\Models\Offer;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\ResponseFormatter;
@@ -124,5 +125,24 @@ class WorkController extends Controller
         $work->distance_to_user = $distance;
 
         return ResponseFormatter::success($work, 'Work displayed successfully!');
+    }
+
+    public function posts()
+    {
+        $user = Auth::user();
+        $works = Work::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+
+        return ResponseFormatter::success($works, 'Data displayed successfully!');
+    }
+
+    public function detail($id)
+    {
+        $work = Work::find($id);
+        $offer = Offer::where('work_id', $work->id)->count();
+
+        return ResponseFormatter::success([
+            'work' => $work,
+            'offer_counts' => $offer . ' Orang Penawar'
+        ], 'Work displayed successfully!');
     }
 }
