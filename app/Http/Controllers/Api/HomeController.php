@@ -55,6 +55,8 @@ class HomeController extends Controller
             * cos( radians( longitude ) - radians(' . $userLongitude . ') )
             + sin( radians(' . $userLatitude . ') )
             * sin( radians( latitude ) ) ) ) AS distance'))
+            ->orderBy('created_at', 'desc')
+            ->limit(12)
             ->get();
 
         foreach ($allWorks as $work) {
@@ -77,7 +79,7 @@ class HomeController extends Controller
     public function recruiter()
     {
         $user = Auth::user();
-        $works = Work::where('user_id', $user->id)->get();
+        $works = Work::where('user_id', $user->id)->orderBy('created_at', 'desc')->limit(12)->get();
 
         return ResponseFormatter::success([
             'works' => $works

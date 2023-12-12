@@ -19,7 +19,7 @@ class WorkController extends Controller
     {
         $user = Auth::user();
         $address = Address::where('user_id', $user->id)->first();
-        $works = Work::all();
+        $works = Work::orderBy('created_at', 'desc')->get();
 
         $userLatitude = $address->latitude;
         $userLongitude = $address->longitude;
