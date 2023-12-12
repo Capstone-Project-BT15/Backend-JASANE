@@ -24,6 +24,7 @@ jobs:
 
       - name: Build and Push the Docker image
         run: |
+          cd Backend-JASANE
           gcloud auth configure-docker asia-southeast2-docker.pkg.dev
           docker build -t asia-southeast2-docker.pkg.dev/capstone-project-406502/jasane-api-cloudrun/jasane:v1.1.2 .
           docker push asia-southeast2-docker.pkg.dev/capstone-project-406502/jasane-api-cloudrun/jasane:v1.1.2
