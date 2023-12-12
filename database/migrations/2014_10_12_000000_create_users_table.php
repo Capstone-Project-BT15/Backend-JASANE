@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('photo')->default('image/default/user.png');
+            $table->string('photo')->default('https://storage.googleapis.com/capstone-project-406502.appspot.com/default/user.png');
             $table->string('fullname');
             $table->string('telephone', 15)->nullable();
             $table->string('email')->unique();

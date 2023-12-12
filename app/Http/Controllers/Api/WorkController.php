@@ -73,9 +73,12 @@ class WorkController extends Controller
 
         $imageUrl = Storage::disk('gcs')->url($fileName);
 
+        $user = Auth::user();
+
         $data = Work::create([
             'image' => $imageUrl,
             'title' => $request->title,
+            'user_id' => $user_id,
             'category_id' => $request->category_id,
             'telephone' => $request->telephone,
             'min_budget' => $request->min_budget,
