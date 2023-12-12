@@ -57,6 +57,9 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $user->is_online = '1';
+        $user->save();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -112,6 +115,9 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $user->is_online = '1';
+        $user->save();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -123,7 +129,15 @@ class AuthController extends Controller
 
     public function logout()
     {
-        Auth::user()->tokens()->delete();
+        $user = Auth::user();
+
+        if ($user) {
+            $user->is_online = '0';
+            $user->save();
+
+            $user->tokens()->delete();
+        }
+
         return response()->json(['message' => 'logout success']);
     }
 }
