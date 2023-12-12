@@ -28,8 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('role:user')->group(function () {
         Route::get('home/user', [App\Http\Controllers\Api\HomeController::class, 'index']);
-        Route::get('works' , [App\Http\Controllers\Api\WorkController::class, 'index']);
-        Route::get('works/{id}' , [App\Http\Controllers\Api\WorkController::class, 'show']);
+        Route::get('works/user' , [App\Http\Controllers\Api\WorkController::class, 'index']);
+        Route::get('works/user/{id}' , [App\Http\Controllers\Api\WorkController::class, 'show']);
         Route::get('get-job/{id}' , [App\Http\Controllers\Api\OfferController::class, 'getJob']);
         Route::post('place-an-offer', [App\Http\Controllers\Api\OfferController::class, 'placeAnOffer']);
     });
