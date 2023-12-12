@@ -78,7 +78,7 @@ class WorkController extends Controller
         $data = Work::create([
             'image' => $imageUrl,
             'title' => $request->title,
-            'user_id' => $user_id,
+            'user_id' => $user->id,
             'category_id' => $request->category_id,
             'telephone' => $request->telephone,
             'min_budget' => $request->min_budget,
