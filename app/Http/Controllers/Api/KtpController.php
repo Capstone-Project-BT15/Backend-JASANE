@@ -34,9 +34,9 @@ class KtpController extends Controller
         $image = $request->file('ktp');
         $fileName = uniqid('image_').'.'.$image->getClientOriginalExtension();
 
-        Storage::disk('gcs')->put($fileName, file_get_contents($image->getRealPath()));
+        Storage::disk('gcs')->put('ktp/' . $fileName, file_get_contents($image->getRealPath()));
 
-        $imageUrl = Storage::disk('gcs')->url($fileName);
+        $imageUrl = Storage::disk('gcs')->url('ktp/' . $fileName);
 
         $data = KtpVerified::create([
             'user_id' => $user->id,

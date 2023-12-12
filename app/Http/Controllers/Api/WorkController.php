@@ -69,9 +69,9 @@ class WorkController extends Controller
         $image = $request->file('image');
         $fileName = uniqid('image_').'.'.$image->getClientOriginalExtension();
 
-        Storage::disk('gcs')->put($fileName, file_get_contents($image->getRealPath()));
+        Storage::disk('gcs')->put('works/' . $fileName, file_get_contents($image->getRealPath()));
 
-        $imageUrl = Storage::disk('gcs')->url($fileName);
+        $imageUrl = Storage::disk('gcs')->url('works/' . $fileName);
 
         $user = Auth::user();
 
