@@ -14,7 +14,6 @@ class AuthController extends Controller
     public function registerUser(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'fullname' => 'required',
             'telephone' => 'required|max:15',
             'email' => 'required|unique:users',
             'password' => 'required|confirmed|min:6',
@@ -25,7 +24,6 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'fullname' => $request->fullname,
             'telephone' => $request->telephone,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -72,7 +70,6 @@ class AuthController extends Controller
     public function registerRecruiter(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'fullname' => 'required',
             'telephone' => 'required|max:15',
             'email' => 'required|unique:users',
             'password' => 'required|confirmed|min:6',
@@ -83,7 +80,6 @@ class AuthController extends Controller
         }
 
         $user = User::create([
-            'fullname' => $request->fullname,
             'telephone' => $request->telephone,
             'email' => $request->email,
             'password' => Hash::make($request->password),

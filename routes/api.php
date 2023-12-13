@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('categories', [App\Http\Controllers\Api\CategoryController::class, 'index']);
     Route::get('ktp/data', [App\Http\Controllers\Api\KtpController::class, 'index']);
     Route::post('ktp/verification', [App\Http\Controllers\Api\KtpController::class, 'verification']);
+    Route::get('ktp/ocr-results', [App\Http\Controllers\Api\KtpController::class, 'ocrResults']);
     Route::post('biodata' , [App\Http\Controllers\Api\BiodataController::class, 'store']);
     Route::post('logout', [App\Http\Controllers\Api\AuthController::class, 'logout']);
 

@@ -45,4 +45,25 @@ class KtpController extends Controller
 
         return ResponseFormatter::success($data, 'KTP has been successfully verified');
     }
+
+    public function ocrResults(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nik' => 'required|min:16|max:16',
+            'fullname' => 'required',
+            'birthday' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $data = [
+            'nik' => $request->nik,
+            'fullname' => $request->fullname,
+            'birthday' => $request->birthday,
+        ];
+
+        return ResponseFormatter::success($data, 'Data displayed successfully!');
+    }
 }
