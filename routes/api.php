@@ -44,5 +44,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('offers/recruiter', [App\Http\Controllers\Api\OfferController::class, 'offersRecruiter']);
         Route::get('payments/{id}', [App\Http\Controllers\Api\PaymentController::class, 'index']);
         Route::post('payments', [App\Http\Controllers\Api\PaymentController::class, 'store']);
+        Route::put('offers/finished/{id}', [App\Http\Controllers\Api\OfferController::class, 'finished']);
     });
 });

@@ -170,4 +170,14 @@ class OfferController extends Controller
         });
     }
 
+    public function finished(Request $request,$id)
+    {
+        $offer = Offer::find($id);
+
+        $offer->update([
+            'status' => 'Selesai'
+        ]);
+
+        return ResponseFormatter::success($offer, 'Data has been successfully updated');
+    }
 }

@@ -63,6 +63,12 @@ class PaymentController extends Controller
 
         $payment = Payment::create($request->all());
 
+        $offer = Offer::find($request->offer_id);
+
+        $offer->update([
+            'status' => 'Diterima'
+        ]);
+
         return ResponseFormatter::success($payment, 'Data has been successfully saved');
     }
 }
