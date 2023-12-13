@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('works/user/{id}' , [App\Http\Controllers\Api\WorkController::class, 'show']);
         Route::get('get-job/{id}' , [App\Http\Controllers\Api\OfferController::class, 'getJob']);
         Route::post('place-an-offer', [App\Http\Controllers\Api\OfferController::class, 'placeAnOffer']);
+        Route::get('offers/user', [App\Http\Controllers\Api\OfferController::class, 'offersUser']);
     });
 
     Route::middleware('role:recruiter')->group(function () {
@@ -40,5 +41,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('works' , [App\Http\Controllers\Api\WorkController::class, 'store']);
         Route::get('works/recruiter' , [App\Http\Controllers\Api\WorkController::class, 'posts']);
         Route::get('works/recruiter/{id}' , [App\Http\Controllers\Api\WorkController::class, 'detail']);
+        Route::get('offers/recruiter', [App\Http\Controllers\Api\OfferController::class, 'offersRecruiter']);
     });
 });
