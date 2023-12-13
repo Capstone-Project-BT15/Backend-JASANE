@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('address_id');
             $table->string('tariff');
             $table->text('experience');
-            $table->enum('status', ['Pending', 'Diterima', 'Ditolak'])->default('Pending');
+            $table->enum('status', ['Pending', 'Diterima', 'Selesai', 'Ditolak'])->default('Pending');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('work_id')->references('id')->on('works')->onDelete('cascade');
