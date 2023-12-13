@@ -5,24 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Work extends Model
+class Rating extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
-
-    public function offers(): HasMany
-    {
-        return $this->hasMany(Offer::class);
-    }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function ratings(): HasMany
+    public function work(): BelongsTo
     {
-        return $this->hasMany(Rating::class);
+        return $this->belongsTo(Work::class);
     }
 }
