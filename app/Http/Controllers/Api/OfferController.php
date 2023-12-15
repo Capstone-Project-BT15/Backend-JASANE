@@ -77,10 +77,30 @@ class OfferController extends Controller
     {
         $user = Auth::user();
 
-        $pending = Offer::where('user_id', $user->id)->where('status', 'Pending')->get();
-        $accepted = Offer::where('user_id', $user->id)->where('status', 'Diterima')->get();
-        $finished = Offer::where('user_id', $user->id)->where('status', 'Selesai')->get();
-        $rejected = Offer::where('user_id', $user->id)->where('status', 'Ditolak')->get();
+        $pending = Offer::where('offers.user_id', $user->id)
+                        ->where('offers.status', 'Pending')
+                        ->join('users', 'offers.user_id', '=', 'users.id')
+                        ->join('works', 'offers.work_id', '=', 'works.id')
+                        ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                        ->get();
+        $accepted = Offer::where('offers.user_id', $user->id)
+                        ->where('offers.status', 'Diterima')
+                        ->join('users', 'offers.user_id', '=', 'users.id')
+                        ->join('works', 'offers.work_id', '=', 'works.id')
+                        ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                        ->get();
+        $finished = Offer::where('offers.user_id', $user->id)
+                        ->where('offers.status', 'Selesai')
+                        ->join('users', 'offers.user_id', '=', 'users.id')
+                        ->join('works', 'offers.work_id', '=', 'works.id')
+                        ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                        ->get();
+        $rejected = Offer::where('offers.user_id', $user->id)
+                        ->where('offers.status', 'Ditolak')
+                        ->join('users', 'offers.user_id', '=', 'users.id')
+                        ->join('works', 'offers.work_id', '=', 'works.id')
+                        ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                        ->get();
 
         return ResponseFormatter::success([
             'pending' => $pending,
@@ -98,9 +118,24 @@ class OfferController extends Controller
         $result = [];
 
         foreach ($works as $work) {
-            $pending = Offer::where('work_id', $work->id)->where('status', 'Pending')->get();
-            $accepted = Offer::where('work_id', $work->id)->where('status', 'Diterima')->get();
-            $finished = Offer::where('work_id', $work->id)->where('status', 'Selesai')->get();
+            $pending = Offer::where('offers.work_id', $work->id)
+                            ->where('offers.status', 'Pending')
+                            ->join('users', 'offers.user_id', '=', 'users.id')
+                            ->join('works', 'offers.work_id', '=', 'works.id')
+                            ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                            ->get();
+            $accepted = Offer::where('offers.work_id', $work->id)
+                            ->where('offers.status', 'Diterima')
+                            ->join('users', 'offers.user_id', '=', 'users.id')
+                            ->join('works', 'offers.work_id', '=', 'works.id')
+                            ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                            ->get();
+            $finished = Offer::where('offers.work_id', $work->id)
+                            ->where('offers.status', 'Selesai')
+                            ->join('users', 'offers.user_id', '=', 'users.id')
+                            ->join('works', 'offers.work_id', '=', 'works.id')
+                            ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                            ->get();
 
             $allOffers = $pending->merge($accepted)->merge($finished);
 
