@@ -20,7 +20,10 @@ class PaymentController extends Controller
 {
     public function index($id)
     {
-        $offer = Offer::find($id);
+        $offer = Offer::find($id)
+                        ->join('users', 'offers.user_id', '=', 'users.id')
+                        ->select('users.fullname', 'users.photo', 'offers.*')
+                        ->first();
 
         if (!$offer) {
             return ResponseFormatter::error(null, 'Offer not found', 404);
