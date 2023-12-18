@@ -28,7 +28,7 @@ class HomeController extends Controller
 
         $userLocation = new GeoCoordinate($userLatitude, $userLongitude);
 
-        $closestWork = Work::select(DB::raw('*, categories.title as category_title,
+        $closestWork = Work::select(DB::raw('works.*, categories.title as category_title,
                 ( 6371000 * acos( cos( radians(' . $userLatitude . ') )
                 * cos( radians( latitude ) )
                 * cos( radians( longitude ) - radians(' . $userLongitude . ') )
@@ -50,7 +50,7 @@ class HomeController extends Controller
             $closest->distance_to_user = ($distance >= 1000) ? number_format($distance / 1000, 2) . ' km' : number_format($distance, 2) . ' m';
         }
 
-        $allWorks = Work::select(DB::raw('*, categories.title as category_title,
+        $allWorks = Work::select(DB::raw('works.*, categories.title as category_title,
             ( 6371000 * acos( cos( radians(' . $userLatitude . ') )
             * cos( radians( latitude ) )
             * cos( radians( longitude ) - radians(' . $userLongitude . ') )
