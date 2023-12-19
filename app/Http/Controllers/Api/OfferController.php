@@ -113,86 +113,83 @@ class OfferController extends Controller
     public function offersRecruiter()
     {
         $user = Auth::user();
-        $works = Work::where('user_id', $user->id)->get();
 
         $result = [];
 
-        foreach ($works as $work) {
-            $pending = Offer::where('offers.work_id', $work->id)
-                            ->where('offers.status', 'Pending')
-                            ->join('users', 'offers.user_id', '=', 'users.id')
-                            ->join('works', 'offers.work_id', '=', 'works.id')
-                            ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
-                            ->get();
-            $accepted = Offer::where('offers.work_id', $work->id)
-                            ->where('offers.status', 'Diterima')
-                            ->join('users', 'offers.user_id', '=', 'users.id')
-                            ->join('works', 'offers.work_id', '=', 'works.id')
-                            ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
-                            ->get();
-            $finished = Offer::where('offers.work_id', $work->id)
-                            ->where('offers.status', 'Selesai')
-                            ->join('users', 'offers.user_id', '=', 'users.id')
-                            ->join('works', 'offers.work_id', '=', 'works.id')
-                            ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
-                            ->get();
+        $pending = Offer::where('offers.status', 'Pending')
+                        ->join('users', 'offers.user_id', '=', 'users.id')
+                        ->join('works', 'offers.work_id', '=', 'works.id')
+                        ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                        ->where('works.user_id', $user->id)
+                        ->get();
+        $accepted = Offer::where('offers.status', 'Diterima')
+                        ->join('users', 'offers.user_id', '=', 'users.id')
+                        ->join('works', 'offers.work_id', '=', 'works.id')
+                        ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                        ->where('works.user_id', $user->id)
+                        ->get();
+        $finished = Offer::where('offers.status', 'Selesai')
+                        ->join('users', 'offers.user_id', '=', 'users.id')
+                        ->join('works', 'offers.work_id', '=', 'works.id')
+                        ->select('users.fullname as user_fullname', 'users.photo as user_photo', 'works.title as work_title', 'works.image as work_image', 'offers.*')
+                        ->where('works.user_id', $user->id)
+                        ->get();
 
-            $allOffers = $pending->merge($accepted)->merge($finished);
+        $allOffers = $pending->merge($accepted)->merge($finished);
 
-            $allUserIds = $allOffers->pluck('user_id')->unique()->toArray();
-            $allWorkIds = $allOffers->pluck('work_id')->unique()->toArray();
-            $allAddressIds = $allOffers->pluck('address_id')->unique()->toArray();
+        $allUserIds = $allOffers->pluck('user_id')->unique()->toArray();
+        $allWorkIds = $allOffers->pluck('work_id')->unique()->toArray();
+        $allAddressIds = $allOffers->pluck('address_id')->unique()->toArray();
 
-            $ratings = Rating::whereIn('user_id', $allUserIds)
-                            ->whereIn('work_id', $allWorkIds)
-                            ->select('user_id', 'work_id', 'star', DB::raw('COUNT(*) as count'))
-                            ->groupBy('user_id', 'work_id', 'star')
-                            ->orderByDesc('count')
-                            ->get()
-                            ->unique('user_id');
+        $ratings = Rating::whereIn('user_id', $allUserIds)
+                        ->whereIn('work_id', $allWorkIds)
+                        ->select('user_id', 'work_id', 'star', DB::raw('COUNT(*) as count'))
+                        ->groupBy('user_id', 'work_id', 'star')
+                        ->orderByDesc('count')
+                        ->get()
+                        ->unique('user_id');
 
-            $addresses = Address::whereIn('id', $allAddressIds)->get();
+        $addresses = Address::whereIn('id', $allAddressIds)->get();
 
-            foreach ($allWorkIds as $workId) {
-                $distance = Work::find($workId);
+        foreach ($allWorkIds as $workId) {
+            $distance = Work::find($workId);
 
-                if (!$distance) {
-                    return ResponseFormatter::error(null, 'Work not found', 404);
-                }
-
-                $distanceLatitude = $distance->latitude;
-                $distanceLongitude = $distance->longitude;
-
-                $distanceLocation = new GeoCoordinate($distanceLatitude, $distanceLongitude);
-
-                foreach ($addresses as $userAddress) {
-                    $userLatitude = $userAddress->latitude;
-                    $userLongitude = $userAddress->longitude;
-
-                    $userLocation = new GeoCoordinate($userLatitude, $userLongitude);
-
-                    $distanceValue = $userLocation->distanceTo($distanceLocation);
-
-                    if ($distanceValue >= 1000) {
-                        $distanceFormatted = number_format($distanceValue / 1000, 2) . ' km';
-                    } else {
-                        $distanceFormatted = number_format($distanceValue, 2) . ' m';
-                    }
-
-                    $distance->distance_to_user = $distanceFormatted;
-                }
+            if (!$distance) {
+                return ResponseFormatter::error(null, 'Work not found', 404);
             }
 
-            $pendingWithRatingsAndDistance = $this->addRatingsAndDistanceToOffers($pending, $ratings, $distance);
-            $acceptedWithRatingsAndDistance = $this->addRatingsAndDistanceToOffers($accepted, $ratings, $distance);
-            $finishedWithRatingsAndDistance = $this->addRatingsAndDistanceToOffers($finished, $ratings, $distance);
+            $distanceLatitude = $distance->latitude;
+            $distanceLongitude = $distance->longitude;
 
-            $result = [
-                'pending' => $pendingWithRatingsAndDistance,
-                'accepted' => $acceptedWithRatingsAndDistance,
-                'finished' => $finishedWithRatingsAndDistance
-            ];
+            $distanceLocation = new GeoCoordinate($distanceLatitude, $distanceLongitude);
+
+            foreach ($addresses as $userAddress) {
+                $userLatitude = $userAddress->latitude;
+                $userLongitude = $userAddress->longitude;
+
+                $userLocation = new GeoCoordinate($userLatitude, $userLongitude);
+
+                $distanceValue = $userLocation->distanceTo($distanceLocation);
+
+                if ($distanceValue >= 1000) {
+                    $distanceFormatted = number_format($distanceValue / 1000, 2) . ' km';
+                } else {
+                    $distanceFormatted = number_format($distanceValue, 2) . ' m';
+                }
+
+                $distance->distance_to_user = $distanceFormatted;
+            }
         }
+
+        $pendingWithRatingsAndDistance = $this->addRatingsAndDistanceToOffers($pending, $ratings, $distance);
+        $acceptedWithRatingsAndDistance = $this->addRatingsAndDistanceToOffers($accepted, $ratings, $distance);
+        $finishedWithRatingsAndDistance = $this->addRatingsAndDistanceToOffers($finished, $ratings, $distance);
+
+        $result = [
+            'pending' => $pendingWithRatingsAndDistance,
+            'accepted' => $acceptedWithRatingsAndDistance,
+            'finished' => $finishedWithRatingsAndDistance
+        ];
 
         return ResponseFormatter::success($result, 'Data displayed successfully!');
     }
