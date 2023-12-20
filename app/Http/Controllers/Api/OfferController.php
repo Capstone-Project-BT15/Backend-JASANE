@@ -186,9 +186,9 @@ class OfferController extends Controller
         $finishedWithRatingsAndDistance = $this->addRatingsAndDistanceToOffers($finished, $ratings, $distance);
 
         $result = [
-            'pending' => $pendingWithRatingsAndDistance,
-            'accepted' => $acceptedWithRatingsAndDistance,
-            'finished' => $finishedWithRatingsAndDistance
+            'pending' => $this->groupOffersByWorkId($pendingWithRatingsAndDistance),
+            'accepted' => $this->groupOffersByWorkId($acceptedWithRatingsAndDistance),
+            'finished' => $this->groupOffersByWorkId($finishedWithRatingsAndDistance)
         ];
 
         return ResponseFormatter::success($result, 'Data displayed successfully!');
@@ -200,6 +200,32 @@ class OfferController extends Controller
             $userRatings = $ratings->where('user_id', $offer->user_id)->where('work_id', $offer->work_id)->first();
             return array_merge($offer->toArray(), ['ratings' => $userRatings, 'distance' => $distance->distance_to_user]);
         });
+    }
+
+    private function groupOffersByWorkId($offers)
+    {
+        $groupedOffers = [];
+
+        foreach ($offers as $offer) {
+            $workId = $offer['work_id'];
+
+            if (!isset($groupedOffers[$workId])) {
+                $groupedOffers[$workId] = [
+                    'work_id' => $offer['work_id'],
+                    'work_title' => $offer['work_title'],
+                    'work_image' => $offer['work_image'],
+                    'data' => [],
+                ];
+            }
+
+            unset($offer['work_id']);
+            unset($offer['user_photo']);
+            unset($offer['work_title']);
+
+            $groupedOffers[$workId]['data'][] = $offer;
+        }
+
+        return array_values($groupedOffers);
     }
 
     public function finished(Request $request,$id)
