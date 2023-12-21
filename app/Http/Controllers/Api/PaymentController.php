@@ -20,10 +20,15 @@ class PaymentController extends Controller
 {
     public function index($id)
     {
+        $adminFees = 1000;
+
         $offer = Offer::where('offers.id', $id)
                         ->join('users', 'offers.user_id', '=', 'users.id')
                         ->select('users.fullname', 'users.photo', 'offers.*')
                         ->first();
+
+        $tariff = intval(str_replace('.', '', $offer->tariff));
+        $total = $tariff + $adminFees;
 
         if (!$offer) {
             return ResponseFormatter::error(null, 'Offer not found', 404);
@@ -39,15 +44,15 @@ class PaymentController extends Controller
 
         $address = Address::find($offer->address_id);
 
-        $result = $this->addRatingsAndAddressToOffers($offer, $ratings, $address);
+        $result = $this->addRatingsAndAddressToOffers($offer, $adminFees, $total, $ratings, $address);
 
         return ResponseFormatter::success($result, 'Data displayed successfully!');
     }
 
-    private function addRatingsAndAddressToOffers($offer, $ratings, $address)
+    private function addRatingsAndAddressToOffers($offer, $adminFees, $total, $ratings, $address)
     {
         $userRatings = $ratings->where('user_id', $offer->user_id)->first();
-        return array_merge($offer->toArray(), ['ratings' => $userRatings, 'address' => $address]);
+        return array_merge($offer->toArray(), ['admin_fees' => $adminFees, 'total' => $total, 'ratings' => $userRatings, 'address' => $address]);
     }
 
     public function store(Request $request)
