@@ -219,71 +219,71 @@ POST /api/categories
             "id": 1,
             "title": "Pertukangan",
             "slug": "pertukangan",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 2,
             "title": "Cuci Baju",
             "slug": "cuci-baju",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 3,
             "title": "Cuci Piring",
             "slug": "cuci-piring",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 4,
             "title": "Setrika",
             "slug": "setrika",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 5,
             "title": "Menyapu",
             "slug": "menyapu",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 6,
             "title": "Mengepel",
             "slug": "mengepel",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 7,
             "title": "Service Elektronik",
             "slug": "service-elektronik",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 8,
             "title": "Tani Harian",
             "slug": "tani-harian",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 9,
             "title": "Memasak",
             "slug": "memasak",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         },
         {
             "id": 10,
             "title": "Baby Sitter",
             "slug": "baby-sitter",
-            "created_at": null,
-            "updated_at": null
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
         }
     ]
 }
