@@ -122,9 +122,9 @@ Headers
 }
 ```
 
-# Biodata Management API using Laravel
+# Management API using Laravel
 
-This API provides endpoints for managing user biodata, including storing user addresses.
+This API provides endpoints to manage usage-related information.
 
 ## Endpoints
 
