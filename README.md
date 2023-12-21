@@ -61,7 +61,7 @@ POST /api/login/user
 #### URL
 
 ```shell
-GET /api/register/recruiter
+POST /api/register/recruiter
 ```
 
 #### Parameters
@@ -197,7 +197,7 @@ POST /api/biodata/store
 #### URL
 
 ``` shell
-POST /api/categories
+GET /api/categories
 ```
 
 #### Headers
@@ -294,7 +294,7 @@ POST /api/categories
 #### URL
 
 ``` shell
-POST /api/home/user
+GET /api/home/user
 ```
 
 #### Headers
