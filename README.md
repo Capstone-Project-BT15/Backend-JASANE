@@ -143,7 +143,9 @@ POST /api/biodata/store
 
 #### Parameters
 
+- `nik` (required): National Identity Number (16 characters).
 - `fullname` (required): Full name of the user.
+- `birthday` (required): User's date of birth.
 - `telephone` (required): User's telephone number (maximum 15 characters).
 - `province` (required): Province of the address.
 - `city` (required): City of the address.
@@ -160,19 +162,29 @@ POST /api/biodata/store
     "status": "success",
     "message": "Data has been successfully saved",
     "data": {
-        "id": 1,
-        "user_id": 123,
-        "fullname": "John Doe",
-        "telephone": "123456789",
-        "province": "Province",
-        "city": "City",
-        "subdistrict": "Subdistrict",
-        "village": "Village",
-        "address": "Detailed address info",
-        "latitude": "latitude_value",
-        "longitude": "longitude_value",
-        "created_at": "timestamp",
-        "updated_at": "timestamp"
+        "user": {
+            "id": 123,
+            "nik": "1234567890123456",
+            "fullname": "John Doe",
+            "birthday": "1990-01-01",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        },
+        "address": {
+            "id": 1,
+            "user_id": 123,
+            "fullname": "John Doe",
+            "telephone": "123456789",
+            "province": "Province",
+            "city": "City",
+            "subdistrict": "Subdistrict",
+            "village": "Village",
+            "address": "Detailed address info",
+            "latitude": "latitude_value",
+            "longitude": "longitude_value",
+            "created_at": "timestamp",
+            "updated_at": "timestamp"
+        }
     }
 }
 ```
