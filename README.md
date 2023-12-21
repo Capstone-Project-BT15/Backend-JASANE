@@ -61,7 +61,7 @@ POST /api/login/user
 #### URL
 
 ```shell
-POST /api/register/recruiter
+GET /api/register/recruiter
 ```
 
 #### Parameters
